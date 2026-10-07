@@ -139,12 +139,53 @@
 
         let isLoaded = false;
 
+        // Base de devoirs extraite de toutes tes captures d'écran
+        const defaultStore = {
+            'lva': [
+                { text: "APPORTER LE MANUEL", date: "2026-10-07", done: true },
+                { text: "Répondre à la question posée (Manuel p.16-17, Texte p.16: Focus on the characters)", date: "2026-10-09", done: false }
+            ],
+            'physique': [
+                { text: "IE chap01", date: "2026-10-07", done: false },
+                { text: "Finir les 5 derniers exercices de la feuille (chapitre 3)", date: "2026-10-09", done: false }
+            ],
+            'ens-sci svt': [
+                { text: "Révisions : Tout le chapitre 1 en prévision du DS. Le manuel aux conditions habituelles sera nécessaire.", date: "2026-10-08", done: false }
+            ],
+            'lvb': [
+                { text: "Préparation de la rédaction! Bien apprendre le vocabulaire et les structures, conjugaison des verbes...", date: "2026-10-08", done: false }
+            ],
+            'maths': [
+                { text: "Exercices : Visionner les vidéos pour réviser le 2nd degré (Révisions 2nd degré : Delta > 0)", date: "2026-10-08", done: false }
+            ],
+            'histoire-geo': [
+                { text: "Travail sur la prise du palais des Tuileries (10 août 1792) - Répondre aux 7 questions (Mr. BADAR)", date: "2026-10-09", done: false }
+            ],
+            'hggsp': [
+                { text: "Répondre au mail de Mr. ANSELMINI (OUI ou NON aux deux questions sur cours PDF & visio)", date: "2026-10-08", done: false }
+            ],
+            'toefl': [
+                { text: "Trouvez un cahier", date: "2026-10-07", done: false },
+                { text: "Séance 1 : lire la première section", date: "2026-10-10", done: false },
+                { text: "Séance 2 : lire la moitié de la section 2", date: "2026-10-17", done: false },
+                { text: "Séance 3 : finir la section 2", date: "2026-10-26", done: false }
+            ],
+            'autre': [
+                { text: "Demander à Jaymal la raquette de Gael Monfils pour tester", date: "2026-10-07", done: false },
+                { text: "Voir avec Chouchou si ça va mieux", date: "2026-10-08", done: false },
+                { text: "Faire du piano 2x", date: "2026-10-11", done: false },
+                { text: "Appeller mamie pour lui dire quand les cours auront repris", date: "2026-10-13", done: false }
+            ]
+        };
+
         onValue(dashboardRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) {
+            if (data && Object.keys(data).length > 0) {
                 window.store = data;
-            } else if (!isLoaded) {
-                window.store = {};
+            } else {
+                // Initialisation sécurisée avec tes devoirs si la base est vide
+                window.store = defaultStore;
+                set(dashboardRef, defaultStore);
             }
 
             window.SUBJECTS.forEach(s => {
