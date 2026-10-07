@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-50/50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tableau de bord & Planning - Monsieur Girard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            50: '#f0f4f8', 100: '#d9e2ec', 200: '#bcccdc', 300: '#9fb3c8', 400: '#829ab1',
+                            500: '#627d98', 600: '#486581', 700: '#334e68', 800: '#243b53', 900: '#102a43', 950: '#0b1d30',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0b1d30; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        input[type="date"] { -webkit-appearance: none; appearance: none; min-height: 2.25rem; display: inline-flex; align-items: center; justify-content: center; text-align: center; }
+        input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; filter: invert(0.2); }
+    </style>
+</head>
+<body class="min-h-full flex flex-col bg-slate-50/50 text-navy-950 antialiased p-3 sm:p-8 lg:p-12">
+
+    <header class="max-w-7xl w-full mx-auto mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-5">
+        <div>
+            <p class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Première Générale</p>
+            <h1 class="text-2xl sm:text-4xl font-extrabold text-navy-950 tracking-tight">
+                Tableau de bord <span class="text-navy-600 font-semibold">• Monsieur Girard</span>
+            </h1>
+        </div>
+
+        <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+            <div class="bg-slate-200/70 p-1 rounded-2xl flex items-center gap-1 border border-slate-300/40 shadow-inner flex-1 sm:flex-initial">
+                <button id="btnTabDashboard" onclick="switchTab('dashboard')" class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 text-xs font-bold rounded-xl transition-all shadow-xs bg-white text-navy-950">
+                    <i data-lucide="layout-grid" class="w-3.5 h-3.5 inline mr-1"></i>Matières
+                </button>
+                <button id="btnTabCalendar" onclick="switchTab('calendar')" class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-navy-950 transition-all">
+                    <i data-lucide="calendar-days" class="w-3.5 h-3.5 inline mr-1"></i>Planning
+                </button>
+            </div>
+            <button onclick="resetAllData()" title="Réinitialiser" class="text-xs font-medium text-slate-400 hover:text-rose-600 transition-colors p-2 rounded-xl border border-slate-200 hover:border-rose-200 shrink-0">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </header>
+
+    <main id="viewDashboard" class="max-w-7xl w-full mx-auto flex-1">
+        <div id="gridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
+    </main>
+
+    <main id="viewCalendar" class="max-w-7xl w-full mx-auto flex-1 hidden">
+        <div class="bg-white rounded-3xl border border-slate-200/80 p-4 sm:p-8 shadow-sm">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Semaine en cours</span>
+                    <h2 id="weekRangeText" class="text-xl sm:text-2xl font-black text-navy-950 tracking-tight"></h2>
+                </div>
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                    <button onclick="changeWeek(0)" class="text-[10px] sm:text-xs font-bold text-navy-600 bg-navy-50 hover:bg-navy-100 px-2.5 py-1.5 rounded-xl transition-all mr-1">
+                        Cette semaine
+                    </button>
+                    <button onclick="changeWeek(-1)" class="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="changeWeek(1)" class="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="weekDaysContainer" class="grid grid-cols-1 md:grid-cols-5 gap-3"></div>
+        </div>
+    </main>
+
+    <div id="itemModal" class="fixed inset-0 bg-navy-950/40 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200 opacity-0">
+        <div id="modalContent" class="bg-white rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-100 transform transition-transform duration-200 scale-95">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-navy-500">Nouvelle tâche</span>
+                    <h3 id="modalSubjectName" class="text-base font-bold text-navy-950"></h3>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-navy-950 p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="addItemForm" onsubmit="handleAddItem(event)" class="space-y-4">
+                <input type="hidden" id="modalSubjectId">
+                
+                <div>
+                    <label class="block text-[10px] font-bold text-navy-800 uppercase tracking-wider mb-1">Matière</label>
+                    <select id="modalSubjectSelect" class="w-full text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-navy-950 focus:outline-none focus:border-navy-800 mb-3"></select>
+
+                    <label class="block text-[10px] font-bold text-navy-800 uppercase tracking-wider mb-1">Détails / Consigne</label>
+                    <textarea id="itemTextInput" required rows="3" placeholder="Écrivez directement ici..." class="w-full text-xs font-medium px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-navy-800 focus:ring-1 focus:ring-navy-800 transition-all resize-none text-navy-950"></textarea>
+                </div>
+
+                <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+                    <label class="text-[10px] font-bold text-navy-800 uppercase tracking-wider">Échéance</label>
+                    <input type="date" id="itemDateInput" required class="text-xs font-semibold px-2 py-1 rounded-lg bg-white border border-slate-200 text-navy-950 focus:outline-none focus:ring-1 focus:ring-navy-800 transition-all">
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal()" class="px-3.5 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Annuler</button>
+                    <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-navy-950 hover:bg-navy-800 rounded-xl shadow-xs transition-all">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "At2sAySAnsZn6FUBVWcxZb_L_TreA6jJ-N5GREw",
+            authDomain: "gestionnaire-taches-5ae9e.firebaseapp.com",
+            databaseURL: "https://gestionnaire-taches-5ae9e-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "gestionnaire-taches-5ae9e",
+            storageBucket: "gestionnaire-taches-5ae9e.firebasestorage.app",
+            messagingSenderId: "1011992643733",
+            appId: "1:1011992643733:web:fbrR614d099f31f707339c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dashboardRef = ref(db, 'dashboard_girard');
+
+        let isLoaded = false;
+
+        onValue(dashboardRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                window.store = data;
+            } else if (!isLoaded) {
+                window.store = {};
+            }
+
+            window.SUBJECTS.forEach(s => {
+                if (!window.store[s.id]) {
+                    window.store[s.id] = [];
+                }
+            });
+
+            isLoaded = true;
+            window.render();
+            window.renderCalendar();
+        });
+
+        window.saveStore = function() {
+            if (isLoaded) {
+                set(dashboardRef, window.store);
+            }
+        };
+    </script>
+
+    <script>
+        window.SUBJECTS = [
+            { id: 'maths', name: 'Mathématiques', tag: 'Spé' },
+            { id: 'physique', name: 'Physique-Chimie', tag: 'Spé' },
+            { id: 'hggsp', name: 'HGGSP', tag: 'Spé' },
+            { id: 'francais', name: 'Français', tag: 'Tronc Commun' },
+            { id: 'histoire-geo', name: 'Histoire-Géographie', tag: 'Tronc Commun' },
+            { id: 'lva', name: 'LVA (Anglais)', tag: 'Tronc Commun' },
+            { id: 'lvb', name: 'LVB (Allemand)', tag: 'Tronc Commun' },
+            { id: 'ens-sci svt', name: 'Enseignement Scientifique SVT', tag: 'Tronc Commun' },
+            { id: 'ens-sci spc', name: 'Enseignement Scientifique SPC', tag: 'Tronc Commun' },
+            { id: 'eps', name: 'EPS', tag: 'Tronc Commun' },
+            { id: 'toefl', name: 'TOEFL', tag: 'examen' },
+            { id: 'autre', name: 'AUTRE', tag: '--' }
+        ];
+
+        window.store = {};
+        let currentWeekOffset = 0;
+
+        function switchTab(tab) {
+            const vDash = document.getElementById('viewDashboard');
+            const vCal = document.getElementById('viewCalendar');
+            const bDash = document.getElementById('btnTabDashboard');
+            const bCal = document.getElementById('btnTabCalendar');
+
+            if (tab === 'dashboard') {
+                vDash.classList.remove('hidden');
+                vCal.classList.add('hidden');
+                bDash.className = "flex-1 sm:flex-initial px-3 sm:px-4 py-2 text-xs font-bold rounded-xl transition-all shadow-xs bg-white text-navy-950";
+                bCal.className = "flex-1 sm:flex-initial px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-navy-950 transition-all";
+            } else {
+                vDash.classList.add('hidden');
+                vCal.classList.remove('hidden');
+                bCal.className = "flex-1 sm:flex-initial px-3 sm:px-4 py-2 text-xs font-bold rounded-xl transition-all shadow-xs bg-white text-navy-950";
+                bDash.className = "flex-1 sm:flex-initial px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 hover:text-navy-950 transition-all";
+                renderCalendar();
+            }
+        }
+
+        function render() {
+            const grid = document.getElementById('gridContainer');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            window.SUBJECTS.forEach(subject => {
+                let items = window.store[subject.id] || [];
+                items.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                const cardHtml = `
+                    <div class="bg-white rounded-3xl border border-slate-200/80 p-5 flex flex-col justify-between hover:border-navy-300 transition-all duration-200 shadow-xs">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-3 pb-2.5 border-b border-slate-100">
+                                <div>
+                                    <h2 class="text-lg font-black text-navy-950 tracking-tight leading-snug">${subject.name}</h2>
+                                    <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">${subject.tag}</span>
+                                </div>
+                                <button onclick="openModal('${subject.id}', '${escapeJs(subject.name)}')" 
+                                    class="w-7 h-7 rounded-full bg-navy-50 hover:bg-navy-950 text-navy-900 hover:text-white flex items-center justify-center transition-all shrink-0">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                            <div class="space-y-2 mb-3">
+                                ${items.length === 0 ? `<p class="text-xs text-slate-300 italic py-3 text-center">Aucune note enregistrée</p>` : items.map((item, index) => `
+                                    <div class="group/item flex items-start justify-between gap-2 p-2 rounded-2xl bg-slate-50/70 hover:bg-slate-100/70 transition-all border border-transparent hover:border-slate-200/60">
+                                        <div class="flex items-start gap-2 min-w-0 flex-1">
+                                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleDone('${subject.id}',${index})" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-navy-950 focus:ring-navy-800 cursor-pointer shrink-0">
+                                            <div class="min-w-0 flex-1">
+                                                <div class="flex items-center gap-2 mb-0.5">
+                                                    <span class="text-[9px] font-bold px-1.5 py-0.2 rounded-md ${isOverdue(item.date) && !item.done ? 'bg-rose-100 text-rose-800' : 'bg-navy-100 text-navy-900'}">${formatDate(item.date)}</span>
+                                                </div>
+                                                <p class="text-xs font-medium leading-relaxed break-words ${item.done ? 'line-through text-slate-400' : 'text-navy-900'}">${escapeHtml(item.text)}</p>
+                                            </div>
+                                        </div>
+                                        <button onclick="deleteItem('${subject.id}',${index})" class="opacity-100 sm:opacity-0 group-hover/item:opacity-100 text-slate-300 hover:text-rose-600 transition-all p-1">
+                                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="pt-1 text-right">
+                            <span class="text-[10px] font-semibold text-slate-300">${items.filter(i => !i.done).length} en attente</span>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', cardHtml);
+            });
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function getMondayToFriday(offset = 0) {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const distanceToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            
+            const monday = new Date(today);
+            monday.setDate(today.getDate() + distanceToMonday + (offset * 7));
+
+            const days = [];
+            for (let i = 0; i < 5; i++) {
+                const nextDay = new Date(monday);
+                nextDay.setDate(monday.getDate() + i);
+                days.push(nextDay);
+            }
+            return days;
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('weekDaysContainer');
+            const rangeText = document.getElementById('weekRangeText');
+            if (!container) return;
+
+            container.innerHTML = '';
+            const weekDays = getMondayToFriday(currentWeekOffset);
+
+            const dayNames = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
+            const monthNamesShort = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+
+            const startDay = weekDays[0];
+            const endDay = weekDays[4];
+            rangeText.textContent = `${startDay.getDate()} ${monthNamesShort[startDay.getMonth()]} — ${endDay.getDate()} ${monthNamesShort[endDay.getMonth()]} ${endDay.getFullYear()}`;
+
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            weekDays.forEach((dateObj, idx) => {
+                const dateStr = dateObj.toISOString().split('T')[0];
+                const isToday = dateStr === todayStr;
+
+                let dayTasks = [];
+                window.SUBJECTS.forEach(sub => {
+                    const tasks = window.store[sub.id] || [];
+                    tasks.forEach((t, index) => {
+                        if (t.date === dateStr) {
+                            dayTasks.push({ ...t, subjectName: sub.name, subjectId: sub.id, taskIndex: index });
+                        }
+                    });
+                });
+
+                const colHtml = `
+                    <div class="flex flex-col bg-slate-50/70 border ${isToday ? 'border-navy-800 ring-2 ring-navy-800/10 bg-navy-50/30' : 'border-slate-200/80'} rounded-2xl p-3 min-h-[320px]">
+                        <div class="flex items-center justify-between border-b border-slate-200/60 pb-2.5 mb-3">
+                            <div>
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider ${isToday ? 'text-navy-800' : 'text-slate-400'}">${dayNames[idx]}</span>
+                                <div class="text-lg font-black ${isToday ? 'text-navy-950' : 'text-navy-900'}">${dateObj.getDate()} ${monthNamesShort[dateObj.getMonth()]}</div>
+                            </div>
+                            <button onclick="openModalWithDate('${dateStr}')" title="Ajouter une tâche ce jour" class="w-6 h-6 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-navy-950 hover:text-white hover:border-navy-950 flex items-center justify-center transition-all shadow-2xs">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex-1 space-y-2 overflow-y-auto">
+                            ${dayTasks.length === 0 ? `
+                                <div class="h-full flex items-center justify-center">
+                                    <span class="text-[11px] text-slate-300 italic">Rien de prévu</span>
+                                </div>
+                            ` : dayTasks.map(t => `
+                                <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs group/task hover:border-navy-300 transition-all">
+                                    <div class="flex items-start justify-between gap-1 mb-1">
+                                        <span class="text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.2 rounded bg-navy-50 text-navy-800 truncate max-w-[110px]">${escapeHtml(t.subjectName)}</span>
+                                        <button onclick="deleteItem('${t.subjectId}',${t.taskIndex})" class="opacity-0 group-hover/task:opacity-100 text-slate-300 hover:text-rose-600 transition-all">
+                                            <i data-lucide="x" class="w-3 h-3"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleDone('${t.subjectId}',${t.taskIndex})" class="mt-0.5 w-3.5 h-3.5 rounded border-slate-300 text-navy-950 focus:ring-navy-800 cursor-pointer shrink-0">
+                                        <p class="text-xs font-medium leading-snug break-words ${t.done ? 'line-through text-slate-400' : 'text-navy-900'}">${escapeHtml(t.text)}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', colHtml);
+            });
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function changeWeek(delta) {
+            currentWeekOffset = delta === 0 ? 0 : currentWeekOffset + delta;
+            renderCalendar();
+        }
+
+        function populateSubjectSelect(selectedSubjectId = '') {
+            const select = document.getElementById('modalSubjectSelect');
+            select.innerHTML = window.SUBJECTS.map(s => `
+                <option value="${s.id}" ${s.id === selectedSubjectId ? 'selected' : ''}>${escapeHtml(s.name)}</option>
+            `).join('');
+        }
+
+        function openModal(id, name) {
+            populateSubjectSelect(id);
+            document.getElementById('modalSubjectId').value = id;
+            document.getElementById('modalSubjectName').textContent = name;
+            const textInput = document.getElementById('itemTextInput');
+            textInput.value = '';
+            document.getElementById('itemDateInput').value = new Date().toISOString().split('T')[0];
+
+            const modal = document.getElementById('itemModal');
+            const content = document.getElementById('modalContent');
+            
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+                textInput.focus();
+            });
+        }
+
+        function openModalWithDate(dateStr) {
+            populateSubjectSelect(window.SUBJECTS[0].id);
+            document.getElementById('modalSubjectId').value = window.SUBJECTS[0].id;
+            document.getElementById('modalSubjectName').textContent = 'Planification';
+            const textInput = document.getElementById('itemTextInput');
+            textInput.value = '';
+            document.getElementById('itemDateInput').value = dateStr;
+
+            const modal = document.getElementById('itemModal');
+            const content = document.getElementById('modalContent');
+            
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+                textInput.focus();
+            });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('itemModal');
+            const content = document.getElementById('modalContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+
+        function handleAddItem(e) {
+            e.preventDefault();
+            const subjectId = document.getElementById('modalSubjectSelect').value || document.getElementById('modalSubjectId').value;
+            const text = document.getElementById('itemTextInput').value.trim();
+            const date = document.getElementById('itemDateInput').value;
+
+            if (!text || !date) return;
+            if (!window.store[subjectId]) window.store[subjectId] = [];
+
+            window.store[subjectId].push({ text, date, done: false });
+            if (typeof window.saveStore === 'function') window.saveStore();
+            closeModal();
+        }
+
+        function toggleDone(subjectId, index) {
+            window.store[subjectId][index].done = !window.store[subjectId][index].done;
+            if (typeof window.saveStore === 'function') window.saveStore();
+        }
+
+        function deleteItem(subjectId, index) {
+            window.store[subjectId].splice(index, 1);
+            if (typeof window.saveStore === 'function') window.saveStore();
+        }
+
+        function resetAllData() {
+            if (confirm('Voulez-vous supprimer toutes les notes ?')) {
+                window.SUBJECTS.forEach(s => window.store[s.id] = []);
+                if (typeof window.saveStore === 'function') window.saveStore();
+            }
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : dateStr;
+        }
+
+        function isOverdue(dateStr) {
+            if (!dateStr) return false;
+            return new Date(dateStr).setHours(0,0,0,0) < new Date().setHours(0,0,0,0);
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function escapeJs(str) {
+            return String(str).replace(/'/g, "\\'");
+        }
+
+        window.openModal = openModal;
+        window.openModalWithDate = openModalWithDate;
+        window.closeModal = closeModal;
+        window.handleAddItem = handleAddItem;
+        window.toggleDone = toggleDone;
+        window.deleteItem = deleteItem;
+        window.resetAllData = resetAllData;
+        window.switchTab = switchTab;
+        window.changeWeek = changeWeek;
+        window.render = render;
+        window.renderCalendar = renderCalendar;
+    </script>
+</body>
+</html>
