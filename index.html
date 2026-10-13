@@ -35,6 +35,7 @@
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            outline: none !important;
         }
 
         body {
@@ -172,10 +173,10 @@
         }
 
         .section-title {
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-size: 1.4rem;
+            font-weight: 900;
             margin-bottom: 16px;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
         }
 
         /* ---------------- ACCUEIL ---------------- */
@@ -188,9 +189,9 @@
             color: var(--text-main);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 32px;
+            padding: 36px 32px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            margin-bottom: 28px;
+            margin-bottom: 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -199,36 +200,58 @@
         }
 
         .greeting-label {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 800;
             color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .giant-clock-home {
-            font-size: 6rem;
-            font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1;
-            font-variant-numeric: tabular-nums;
             margin-bottom: 6px;
         }
 
+        .giant-clock-home {
+            font-size: 5.5rem;
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 12px;
+        }
+
+        .date-weather-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .giant-date-home {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: var(--text-muted);
             text-transform: capitalize;
+        }
+
+        .weather-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--subtle);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
         .badge-today-count {
             background: var(--subtle);
             border: 1px solid var(--border);
-            padding: 10px 18px;
+            padding: 12px 20px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 800;
             color: var(--text-main);
+            margin-top: 18px;
+            display: inline-block;
         }
 
         .today-cards-columns-container {
@@ -245,7 +268,7 @@
 
         @media (max-width: 768px) {
             .giant-clock-home {
-                font-size: 3.5rem;
+                font-size: 3.8rem;
             }
 
             .today-cards-columns-container {
@@ -256,6 +279,10 @@
 
             .today-card-item {
                 width: 100% !important;
+            }
+
+            .badge-today-count {
+                margin-top: 0;
             }
         }
 
@@ -313,7 +340,327 @@
             flex-shrink: 0;
         }
 
-        /* ---------------- ONGLET TÂCHES (CARTES PAR MATIÈRE) ---------------- */
+        /* ---------------- SECTION NOTES (STYLE NOTION / iOS INFINI) ---------------- */
+        .notes-app-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: calc(100vh - 80px);
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        @media (max-width: 900px) {
+            .notes-app-container {
+                grid-template-columns: 1fr;
+                height: auto;
+                min-height: calc(100vh - 120px);
+            }
+        }
+
+        .notes-sidebar-col {
+            background: var(--subtle);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .notes-sidebar-header {
+            padding: 20px 20px 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notes-sidebar-header h2 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .btn-new-note {
+            background: #0f172a;
+            color: #ffffff;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            font-weight: 400;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            padding-bottom: 2px;
+            transition: transform 0.15s;
+        }
+
+        .btn-new-note:hover {
+            transform: scale(1.05);
+        }
+
+        .notes-search-box {
+            padding: 0 20px 12px 20px;
+        }
+
+        .notes-search-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.88rem;
+            background: #ffffff;
+        }
+
+        .notes-list-scroll {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0 10px 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .note-item-card {
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.15s, opacity 0.3s ease, transform 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .note-item-card.fade-out {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .note-item-card:hover {
+            background: rgba(0,0,0,0.03);
+        }
+
+        .note-item-card.active {
+            background: #ffffff;
+            border-color: var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .note-item-content-wrapper {
+            flex-grow: 1;
+            min-width: 0;
+            padding-right: 8px;
+        }
+
+        .note-item-title {
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .note-item-snippet {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 6px;
+        }
+
+        .note-item-date {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+
+        .btn-delete-inline {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity 0.15s, color 0.15s;
+        }
+
+        .note-item-card:hover .btn-delete-inline {
+            opacity: 1;
+        }
+
+        .btn-delete-inline:hover {
+            color: #ef4444;
+        }
+
+        .notes-editor-col {
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: 100%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .notes-editor-body {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 20px;
+            min-height: 100%;
+        }
+
+        .note-title-input {
+            font-size: 2rem;
+            font-weight: 900;
+            border: none;
+            outline: none;
+            width: 100%;
+            color: var(--text-main);
+            background: transparent;
+        }
+
+        .note-title-input::placeholder {
+            color: #cbd5e1;
+        }
+
+        /* Éditeur riche infini type Notion */
+        .note-content-editable {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            border: none;
+            outline: none;
+            width: 100%;
+            flex-grow: 1;
+            color: var(--text-main);
+            background: transparent;
+            min-height: 300px;
+            word-break: break-word;
+        }
+
+        .note-content-editable:empty:before {
+            content: "Commencez à écrire (/ pour tableau, - pour liste, liens, images)...";
+            color: #cbd5e1;
+            pointer-events: none;
+            display: block;
+        }
+
+        .note-content-editable ul {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+
+        .note-content-editable li {
+            margin-bottom: 4px;
+        }
+
+        .note-content-editable img {
+            max-width: 180px;
+            max-height: 180px;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 12px 12px 12px 0;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .note-content-editable a {
+            color: #2563eb;
+            text-decoration: underline;
+            display: inline-block;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: bottom;
+        }
+
+        /* Tableaux intégrés minimalistes, modernes et arrondis */
+        .note-content-editable table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border: 2px solid #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+        }
+
+        .note-content-editable th, .note-content-editable td {
+            border-bottom: 1px solid #cbd5e1;
+            border-right: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            background: #ffffff;
+            color: var(--text-main);
+        }
+
+        .note-content-editable th:last-child, .note-content-editable td:last-child {
+            border-right: none;
+        }
+
+        .note-content-editable tr:last-child td {
+            border-bottom: none;
+        }
+
+        .note-content-editable th {
+            background: #f1f5f9;
+            font-weight: 900;
+            border-bottom: 2px solid #0f172a;
+        }
+
+        /* Menu déroulant slash command */
+        .slash-menu {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            width: 220px;
+            z-index: 100;
+            display: none;
+            padding: 6px;
+        }
+
+        .slash-item {
+            padding: 8px 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .slash-item:hover, .slash-item.selected {
+            background: var(--subtle);
+        }
+
+        .no-note-selected {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* ---------------- ONGLET TÂCHES ---------------- */
         .subjects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -340,15 +687,15 @@
         }
 
         .subject-title-area h3 {
-            font-size: 1.15rem;
-            font-weight: 800;
+            font-size: 1.25rem;
+            font-weight: 900;
             color: var(--text-main);
             margin-bottom: 2px;
         }
 
         .subject-title-area span {
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.78rem;
+            font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -432,15 +779,15 @@
         }
 
         .task-text-content {
-            font-size: 0.88rem;
-            font-weight: 600;
+            font-size: 0.92rem;
+            font-weight: 700;
             color: var(--text-main);
             line-height: 1.35;
         }
 
         .subject-footer-count {
-            font-size: 0.8rem;
-            font-weight: 700;
+            font-size: 0.85rem;
+            font-weight: 800;
             color: var(--text-muted);
             text-align: right;
             margin-top: auto;
@@ -448,7 +795,7 @@
             border-top: 1px dashed var(--border);
         }
 
-        /* ---------------- CALENDRIER SANS TROU NI CORNER CUT ---------------- */
+        /* ---------------- CALENDRIER ---------------- */
         .calendar-nav-bar {
             display: flex;
             justify-content: space-between;
@@ -459,8 +806,8 @@
         }
 
         .week-indicator {
-            font-size: 2.8rem;
-            font-weight: 800;
+            font-size: 1.25rem;
+            font-weight: 900;
         }
 
         .week-nav-btns {
@@ -473,8 +820,8 @@
             border: 1px solid var(--border);
             padding: 8px 16px;
             border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 0.9rem;
+            font-weight: 800;
             cursor: pointer;
             color: var(--text-main);
         }
@@ -515,8 +862,8 @@
         }
 
         .day-header-full {
-            font-size: 0.88rem;
-            font-weight: 800;
+            font-size: 0.95rem;
+            font-weight: 900;
             padding-bottom: 8px;
             margin-bottom: 10px;
             border-bottom: 1px solid var(--border);
@@ -561,22 +908,22 @@
         }
 
         .view-subject {
-            font-size: 0.8rem;
-            font-weight: 800;
+            font-size: 0.85rem;
+            font-weight: 900;
             text-transform: uppercase;
             color: var(--text-muted);
             margin-bottom: 6px;
         }
 
         .view-title {
-            font-size: 1.35rem;
-            font-weight: 800;
+            font-size: 1.45rem;
+            font-weight: 900;
             margin-bottom: 12px;
         }
 
         .view-date {
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 700;
             color: var(--text-muted);
             background: var(--subtle);
             padding: 6px 12px;
@@ -590,7 +937,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             padding: 14px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             min-height: 80px;
             margin-bottom: 18px;
             white-space: pre-wrap;
@@ -602,8 +949,8 @@
             gap: 10px;
             margin-bottom: 20px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 800;
             color: var(--text-main);
             user-select: none;
         }
@@ -623,8 +970,8 @@
         }
 
         .form-group label {
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.8rem;
+            font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
         }
@@ -633,8 +980,7 @@
             padding: 12px;
             border: 1px solid var(--border);
             border-radius: 10px;
-            font-size: 0.9rem;
-            outline: none;
+            font-size: 0.95rem;
             background: var(--subtle);
         }
 
@@ -656,8 +1002,8 @@
             border: 1px solid var(--border);
             padding: 10px 18px;
             border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
         }
 
@@ -667,15 +1013,15 @@
             border: none;
             padding: 10px 18px;
             border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- MENU FLOTTANT COMPACT AVEC LOGO MONTAGNE -->
+    <!-- MENU FLOTTANT COMPACT GAUCHE AVEC LOGO MONTAGNE -->
     <nav class="floating-sidebar">
         <div class="nav-logo" title="Raphaël Space">
             <svg viewBox="0 0 24 24"><path d="M8 18l4-8 4 8M3 20l7-14 4 7 3-3 4 10H3z"/></svg>
@@ -683,6 +1029,9 @@
         <div class="nav-divider"></div>
         <button class="nav-btn active" id="btn-nav-home" onclick="switchPage('home', this)" title="Accueil">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </button>
+        <button class="nav-btn" id="btn-nav-notes" onclick="switchPage('notes', this)" title="Notes">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
         </button>
         <button class="nav-btn" id="btn-nav-tasks" onclick="switchPage('tasks', this)" title="Tâches">
             <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
@@ -698,12 +1047,18 @@
             <div class="home-container">
                 <div class="home-hero-card">
                     <div>
-                        <div class="greeting-label">Bonjour Raphaël</div>
+                        <div class="greeting-label">Bonjour Raphaël 👋</div>
                         <div id="giantClock" class="giant-clock-home">00:00:00</div>
-                        <div id="giantDate" class="giant-date-home">Chargement...</div>
+                        <div class="date-weather-row">
+                            <div id="giantDate" class="giant-date-home">Chargement...</div>
+                            <div id="weatherPill" class="weather-pill">
+                                <span id="weatherIcon">☀️</span>
+                                <span id="weatherTemp">--°C</span>
+                            </div>
+                        </div>
                     </div>
                     <div>
-                        <div id="todayCountBadge" class="badge-today-count">0 devoirs prévu</div>
+                        <div id="todayCountBadge" class="badge-today-count">0 devoir prévu</div>
                     </div>
                 </div>
 
@@ -715,7 +1070,35 @@
             </div>
         </section>
 
-        <!-- PAGE 2 : TÂCHES & CONFIGURATION (CARTES PAR MATIÈRE) -->
+        <!-- PAGE : NOTES -->
+        <section id="page-notes" class="tab-page">
+            <div class="notes-app-container">
+                <div class="notes-sidebar-col">
+                    <div class="notes-sidebar-header">
+                        <h2>Notes</h2>
+                        <button class="btn-new-note" onclick="createNewNote()" title="Nouvelle note">+</button>
+                    </div>
+                    <div class="notes-search-box">
+                        <input type="text" id="noteSearchInput" placeholder="Rechercher..." oninput="renderNotesList()">
+                    </div>
+                    <div class="notes-list-scroll" id="notesListContainer" tabindex="0" onkeydown="handleSidebarKeydown(event)"></div>
+                </div>
+                <div class="notes-editor-col" id="notesEditorCol">
+                    <div class="no-note-selected" id="noNoteSelected">Sélectionnez ou créez une note</div>
+                    <div id="activeNoteEditor" style="display:none; display:flex; flex-direction:column; height:100%;">
+                        <div class="notes-editor-body">
+                            <input type="text" class="note-title-input" id="activeNoteTitle" placeholder="Titre..." oninput="updateActiveNoteData()" onkeydown="handleTitleKeydown(event)">
+                            <div class="note-content-editable" id="activeNoteContent" contenteditable="true" oninput="handleContentInput()" onkeydown="handleContentKeydown(event)" onkeyup="handleContentKeyup(event)"></div>
+                        </div>
+                        <div class="slash-menu" id="slashMenu" style="display:none;">
+                            <div class="slash-item selected" onclick="insertTableFromSlash()">Tableau</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2 : TÂCHES -->
         <section id="page-tasks" class="tab-page">
             <div class="section-title" style="margin-bottom: 20px;">Gestion des tâches par matière</div>
             <div class="subjects-grid" id="subjectsGridContainer"></div>
@@ -734,38 +1117,52 @@
         </section>
     </main>
 
-    <!-- MODALE DE CONSULTATION -->
+    <!-- MODALE DE CONFIGURATION DE TABLEAU -->
+    <div class="modal-overlay" id="tableModal">
+        <div class="modal-card">
+            <div class="section-title" style="margin-bottom: 14px;">Créer un tableau</div>
+            <div class="form-group">
+                <label>Nombre de lignes (vertical)</label>
+                <input type="number" id="tableRows" value="3" min="1" max="20" onkeydown="handleTableInputKeydown(event, 'cols')">
+            </div>
+            <div class="form-group">
+                <label>Nombre de colonnes (horizontal)</label>
+                <input type="number" id="tableCols" value="3" min="1" max="10" onkeydown="handleTableInputKeydown(event, 'submit')">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-sec" onclick="closeTableModal()">Annuler</button>
+                <button class="btn-pri" onclick="confirmCreateTable()">Insérer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALES TÂCHES -->
     <div class="modal-overlay" id="viewModal">
         <div class="modal-card">
             <div class="view-subject" id="vSubject">Matière</div>
             <div class="view-title" id="vTitle">Sujet de la tâche</div>
             <div class="view-date" id="vDate">Date max : --</div>
             <div class="view-notes-box" id="vNotes">Aucune note.</div>
-            
             <label class="checkbox-container">
                 <input type="checkbox" id="vCompletedCheck" onchange="toggleTaskCompleted()">
                 <span>Travail fait</span>
             </label>
-
             <div class="modal-actions">
                 <button class="btn-sec" onclick="closeViewModal()">Fermer</button>
             </div>
         </div>
     </div>
 
-    <!-- MODALE D'ÉDITION & CONFIGURATION -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-card">
             <div class="section-title" id="editModalTitle" style="margin-bottom: 14px;">Configuration de la tâche</div>
-            
             <div class="form-group">
                 <label>Sujet / Titre</label>
-                <input type="text" id="fTitle" placeholder="Ex: Dissertation Français">
+                <input type="text" id="fTitle" placeholder="Ex: Dissertation Français" onkeydown="handleTaskModalKeydown(event, 'subject')">
             </div>
-
             <div class="form-group">
                 <label>Matière</label>
-                <select id="fSubject">
+                <select id="fSubject" onkeydown="handleTaskModalKeydown(event, 'dueDate')">
                     <option value="Mathématiques">Mathématiques</option>
                     <option value="Physique-Chimie">Physique-Chimie</option>
                     <option value="HGGSP">HGGSP</option>
@@ -779,17 +1176,14 @@
                     <option value="AUTRE">AUTRE</option>
                 </select>
             </div>
-
             <div class="form-group">
                 <label>Date Maximum (Échéance)</label>
-                <input type="date" id="fDueDate">
+                <input type="date" id="fDueDate" onkeydown="handleTaskModalKeydown(event, 'notes')">
             </div>
-
             <div class="form-group">
                 <label>Notes & Contenus</label>
-                <textarea id="fNotes" placeholder="Détails du devoir, consignes..."></textarea>
+                <textarea id="fNotes" placeholder="Détails du devoir, consignes..." onkeydown="handleTaskModalKeydown(event, 'submit')"></textarea>
             </div>
-
             <div class="modal-actions">
                 <button class="btn-sec" style="color:#ef4444;" id="btnDelete" onclick="deleteCurrentTask()">Supprimer</button>
                 <button class="btn-sec" onclick="closeEditModal()">Annuler</button>
@@ -813,122 +1207,412 @@
             'AUTRE': { subtitle: '--', color: 'var(--c-autre)' }
         };
 
-        const pageList = ['home', 'tasks', 'calendar'];
+        const pageList = ['home', 'notes', 'tasks', 'calendar'];
         let currentPageIndex = 0;
-
         let activeTaskId = null;
         let currentMondayOffset = 0;
+        let lastSelectedSubject = localStorage.getItem('raphael_last_subject') || 'Mathématiques';
 
-        // Base exacte avec statuts d'accomplissement identiques aux captures d'écran
         let tasks = JSON.parse(localStorage.getItem('raphael_tasks_v25')) || [
-            // Mathématiques
-            { id: 'm1', title: 'Exercices : Visionner les vidéos pour réviser le 2nd degré (Révisions 2nd degré : Delta > 0)', subject: 'Mathématiques', dueDate: '2026-10-08', notes: '', completed: true },
+            { id: 'm1', title: 'Exercices : Visionner les vidéos pour réviser le 2nd degré', subject: 'Mathématiques', dueDate: '2026-10-08', notes: '', completed: true },
             { id: 'm2', title: 'exos de Sophie', subject: 'Mathématiques', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'm3', title: 'commencer a s\'interesser a la nouvelle lecon prochaine : suites numeriques', subject: 'Mathématiques', dueDate: '2026-10-13', notes: '', completed: false },
+            { id: 'm3', title: 'commencer a s\'interesser a la nouvelle lecon : suites numeriques', subject: 'Mathématiques', dueDate: '2026-10-13', notes: '', completed: false },
             { id: 'm4', title: 'exercices de sophie : automatisme part4', subject: 'Mathématiques', dueDate: '2026-10-13', notes: '', completed: false },
-
-            // Physique-Chimie
             { id: 'p1', title: 'IE chap01', subject: 'Physique-Chimie', dueDate: '2026-10-07', notes: '', completed: true },
             { id: 'p2', title: 'envoyer a tata sophie la photo des exos + enonces', subject: 'Physique-Chimie', dueDate: '2026-10-08', notes: '', completed: true },
-            { id: 'p3', title: 'Demander a Mrs DUPUICH pour l\'exercice ou une reexplication de la forme et le raisonnement', subject: 'Physique-Chimie', dueDate: '2026-10-09', notes: '', completed: true },
-            { id: 'p4', title: 'regarder la réponse de tata sophie sue whatsapp dès réponse', subject: 'Physique-Chimie', dueDate: '2026-10-09', notes: '', completed: true },
-            { id: 'p5', title: 'recopier les 5 exercices de physique sur la feuille et ensuite les envoyer a tata sophie par message', subject: 'Physique-Chimie', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'p6', title: 'faire la fiche de calcul littéral envoyé par tata sophie et l\'envoyé avec le reste', subject: 'Physique-Chimie', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'p7', title: 'commencer a s\'interesser a la nouvelle lecon prochaine : optique', subject: 'Physique-Chimie', dueDate: '2026-10-13', notes: '', completed: false },
-
-            // HGGSP
-            { id: 'h1', title: 'Répondre au mail de Mr. ANSELMINI (OUI ou NON aux deux questions sur cours PDF & visio)', subject: 'HGGSP', dueDate: '2026-10-08', notes: '', completed: true },
-
-            // Français
-            { id: 'f1', title: 'recherche a faire sur un plan linéaire methodo de francais a voir sur le commentaire', subject: 'Français', dueDate: '2026-10-07', notes: '', completed: true },
-            { id: 'f2', title: 'Finir les 2 derniers exercices de la feuille (chapitre 3) en visio avec tata Sophie', subject: 'Français', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'f3', title: 'plan linéaire du premier texte à réaliser avec une aide de tata sophie (explication du contexte...etc)', subject: 'Français', dueDate: '2026-10-15', notes: '', completed: false },
-
-            // Histoire-Géographie
-            { id: 'hg1', title: 'Travail sur la prise du palais des Tuileries (10 août 1792) - Répondre aux 7 questions (Mr. BADAR)', subject: 'Histoire-Géographie', dueDate: '2026-10-09', notes: '', completed: true },
-            { id: 'hg2', title: 'regarder la réponse de M BADAR pour le travail par mail', subject: 'Histoire-Géographie', dueDate: '2026-10-13', notes: '', completed: true },
-
-            // LVA (Anglais)
+            { id: 'p3', title: 'Demander a Mrs DUPUICH pour l\'exercice', subject: 'Physique-Chimie', dueDate: '2026-10-09', notes: '', completed: true },
+            { id: 'p4', title: 'regarder la réponse de tata sophie', subject: 'Physique-Chimie', dueDate: '2026-10-09', notes: '', completed: true },
+            { id: 'p5', title: 'recopier les 5 exercices de physique', subject: 'Physique-Chimie', dueDate: '2026-10-12', notes: '', completed: true },
+            { id: 'p6', title: 'faire la fiche de calcul littéral', subject: 'Physique-Chimie', dueDate: '2026-10-12', notes: '', completed: true },
+            { id: 'p7', title: 'commencer a s\'interesser a la nouvelle lecon : optique', subject: 'Physique-Chimie', dueDate: '2026-10-13', notes: '', completed: false },
+            { id: 'h1', title: 'Répondre au mail de Mr. ANSELMINI', subject: 'HGGSP', dueDate: '2026-10-08', notes: '', completed: true },
+            { id: 'f1', title: 'recherche a faire sur un plan linéaire', subject: 'Français', dueDate: '2026-10-07', notes: '', completed: true },
+            { id: 'f2', title: 'Finir les 2 derniers exercices en visio', subject: 'Français', dueDate: '2026-10-12', notes: '', completed: true },
+            { id: 'f3', title: 'plan linéaire du premier texte à réaliser', subject: 'Français', dueDate: '2026-10-15', notes: '', completed: false },
+            { id: 'hg1', title: 'Travail sur la prise du palais des Tuileries', subject: 'Histoire-Géographie', dueDate: '2026-10-09', notes: '', completed: true },
+            { id: 'hg2', title: 'regarder la réponse de M BADAR', subject: 'Histoire-Géographie', dueDate: '2026-10-13', notes: '', completed: true },
             { id: 'a1', title: 'APPORTER LE MANUEL', subject: 'LVA (Anglais)', dueDate: '2026-10-07', notes: '', completed: true },
-            { id: 'a2', title: 'Répondre a la question posée (Manuel p.16-17, Texte p.16: Focus on the characters)', subject: 'LVA (Anglais)', dueDate: '2026-10-09', notes: '', completed: true },
-
-            // LVB (Allemand)
-            { id: 'al1', title: 'Préparation de la rédaction! Bien apprendre le vocabulaire et les structures, conjugaison des verbes...', subject: 'LVB (Allemand)', dueDate: '2026-10-08', notes: '', completed: false },
+            { id: 'a2', title: 'Répondre a la question posée', subject: 'LVA (Anglais)', dueDate: '2026-10-09', notes: '', completed: true },
+            { id: 'al1', title: 'Préparation de la rédaction!', subject: 'LVB (Allemand)', dueDate: '2026-10-08', notes: '', completed: false },
             { id: 'al2', title: 'réaliser le quizz sur le chapitre', subject: 'LVB (Allemand)', dueDate: '2026-10-08', notes: '', completed: true },
-
-            // SVT
-            { id: 'svt1', title: 'trouvez une personne pour le travail de groupe en svt', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-07', notes: '', completed: true },
-            { id: 'svt2', title: 'imprimer l\'activité de svt préparé au préalable', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'svt3', title: 'Révisions : Tout le chapitre 1 en prévision du DS. Le manuel aux conditions habituelles sera nécessaire.', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-15', notes: '', completed: false },
-            { id: 'svt4', title: 'rédiger tout le travail de groupe en svt activité page 100 et 101 en binome 40min', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-15', notes: '', completed: true },
-            { id: 'svt5', title: 'recopier tout le travail de groupe sur une feuille au propre', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-15', notes: '', completed: true },
-            { id: 'svt6', title: 'renanalyser et si besoin recopier tout le travail de groupe sur une feuille au propre', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-15', notes: '', completed: true },
-
-            // SPC
+            { id: 'svt1', title: 'trouvez une personne pour le travail de groupe', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-07', notes: '', completed: true },
+            { id: 'svt2', title: 'imprimer l\'activité de svt', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-12', notes: '', completed: true },
+            { id: 'svt3', title: 'Révisions : Tout le chapitre 1 en prévision du DS', subject: 'Enseignement Scientifique SVT', dueDate: '2026-10-15', notes: '', completed: false },
             { id: 'spc1', title: 'DS chapitre 01', subject: 'Enseignement Scientifique SPC', dueDate: '2026-10-14', notes: '', completed: false },
-            { id: 'spc2', title: 'Refaire tout les exercices', subject: 'Enseignement Scientifique SPC', dueDate: '2026-10-14', notes: '', completed: false },
-
-            // TOEFL
-            { id: 't1', title: 'Trouvez un cahier', subject: 'TOEFL', dueDate: '2026-10-07', notes: '', completed: true },
-            { id: 't2', title: 'Séance 1 : lire la première section et s\'organiser au niveau du cahier', subject: 'TOEFL', dueDate: '2026-10-13', notes: '', completed: false },
-            { id: 't3', title: 'Séance 2 : lire la moitié de la section 2', subject: 'TOEFL', dueDate: '2026-10-17', notes: '', completed: false },
-            { id: 't4', title: 'Séance 3 : finir la section 2', subject: 'TOEFL', dueDate: '2026-10-26', notes: '', completed: false },
-
-            // AUTRE
-            { id: 'o1', title: 'Demander à Jaymal la raquette de Gael Monfils pour tester', subject: 'AUTRE', dueDate: '2026-10-07', notes: '', completed: true },
-            { id: 'o2', title: 'récap des problèmes a tata sophie a faire structuré et mail avant 19h', subject: 'AUTRE', dueDate: '2026-10-07', notes: '', completed: true },
-            { id: 'o3', title: 'Voir avec Chouchou si ça va mieux', subject: 'AUTRE', dueDate: '2026-10-08', notes: '', completed: true },
-            { id: 'o4', title: 'Faire du piano 2x', subject: 'AUTRE', dueDate: '2026-10-11', notes: '', completed: true },
-            { id: 'o5', title: 'CVL : faire la profesion de foi et l\'envoyer a l\'adresse mail renseigné', subject: 'AUTRE', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'o6', title: 'Organisation Paris faire les réservations avec maman le samedi pour être sur', subject: 'AUTRE', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'o7', title: 'Organisation Paris voir comment avec les parents de Chloé cela évolue', subject: 'AUTRE', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'o8', title: 'envoyer un mail de correction du suppléant auprès de madame delaigue pour le changement avec Amine Yassine', subject: 'AUTRE', dueDate: '2026-10-12', notes: '', completed: true },
-            { id: 'o9', title: 'Appeller mamie pour lui dire quand les cours auront repris', subject: 'AUTRE', dueDate: '2026-10-12', notes: '', completed: false },
-            { id: 'o10', title: 'Refaire du piano', subject: 'AUTRE', dueDate: '2026-10-13', notes: '', completed: true },
-            { id: 'o11', title: 'demandez a maman en trouvant le stylo plume de changement de remplacement', subject: 'AUTRE', dueDate: '2026-10-13', notes: '', completed: false },
-            { id: 'o12', title: 'Allez courir 10km', subject: 'AUTRE', dueDate: '2026-10-15', notes: '', completed: false },
-            { id: 'o13', title: 'refaire du piano', subject: 'AUTRE', dueDate: '2026-10-14', notes: '', completed: false }
+            { id: 'spc2', title: 'Refaire tout les exercices', subject: 'Enseignement Scientifique SPC', dueDate: '2026-10-14', notes: '', completed: false }
         ];
 
-        // Raccourci ESPACE & Flèches Clavier
-        window.addEventListener('keydown', (e) => {
-            const activeEl = document.activeElement;
-            const isEditingText = activeEl && (
-                activeEl.tagName === 'INPUT' || 
-                activeEl.tagName === 'TEXTAREA' || 
-                activeEl.tagName === 'SELECT' || 
-                activeEl.isContentEditable
-            );
+        let notes = JSON.parse(localStorage.getItem('raphael_notes_v4')) || [
+            { id: 'n1', title: 'Idées de projets', content: 'Travailler sur le tableau de bord et optimiser les performances.', updatedAt: Date.now() - 3600000 },
+            { id: 'n2', title: 'Formules importantes', content: 'Delta = b^2 - 4ac', updatedAt: Date.now() - 86400000 }
+        ];
+        let activeNoteId = null;
 
-            if (!isEditingText) {
-                if (e.code === 'Space' || e.key === ' ') {
+        // --- GESTION DES NOTES ---
+        function renderNotesList() {
+            const container = document.getElementById('notesListContainer');
+            const query = document.getElementById('noteSearchInput').value.toLowerCase();
+            container.innerHTML = '';
+
+            const filtered = notes.filter(n => (n.title || '').toLowerCase().includes(query) || (n.content || '').toLowerCase().includes(query));
+            filtered.sort((a, b) => b.updatedAt - a.updatedAt);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="font-size:0.85rem; color:var(--text-muted); padding:16px; text-align:center;">Aucune note</div>`;
+                return;
+            }
+
+            filtered.forEach(n => {
+                const card = document.createElement('div');
+                card.className = `note-item-card ${n.id === activeNoteId ? 'active' : ''}`;
+                card.id = `note-card-${n.id}`;
+                const dateStr = new Date(n.updatedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = n.content || '';
+                const plainSnippet = tempDiv.textContent || tempDiv.innerText || 'Pas de texte supplémentaire';
+
+                let displayTitle = n.title.trim();
+                if (!displayTitle && plainSnippet.trim()) {
+                    displayTitle = plainSnippet.trim().split('\n')[0];
+                }
+                if (!displayTitle) displayTitle = 'Nouvelle note';
+
+                card.innerHTML = `
+                    <div class="note-item-content-wrapper" onclick="selectNote('${n.id}')">
+                        <div class="note-item-title">${displayTitle}</div>
+                        <div class="note-item-snippet">${plainSnippet}</div>
+                        <div class="note-item-date">${dateStr}</div>
+                    </div>
+                    <button class="btn-delete-inline" onclick="event.stopPropagation(); deleteNoteById('${n.id}')" title="Supprimer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectNote(id) {
+            activeNoteId = id;
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+
+            document.getElementById('noNoteSelected').style.display = 'none';
+            document.getElementById('activeNoteEditor').style.display = 'flex';
+            document.getElementById('activeNoteTitle').value = n.title;
+            document.getElementById('activeNoteContent').innerHTML = n.content;
+            renderNotesList();
+        }
+
+        function createNewNote() {
+            const newN = {
+                id: Date.now().toString(),
+                title: '',
+                content: '',
+                updatedAt: Date.now()
+            };
+            notes.unshift(newN);
+            saveNotesData();
+            selectNote(newN.id);
+            setTimeout(() => document.getElementById('activeNoteTitle').focus(), 50);
+        }
+
+        function updateActiveNoteData() {
+            if (!activeNoteId) return;
+            const editor = document.getElementById('activeNoteContent');
+            autoDetectLinks(editor);
+
+            const n = notes.find(x => x.id === activeNoteId);
+            if (n) {
+                n.title = document.getElementById('activeNoteTitle').value;
+                n.content = editor.innerHTML;
+                n.updatedAt = Date.now();
+                saveNotesData();
+                renderNotesList();
+            }
+        }
+
+        function autoDetectLinks(rootElement) {
+            const walker = document.createTreeWalker(rootElement, NodeFilter.SHOW_TEXT, null, false);
+            let node;
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+            while (node = walker.nextNode()) {
+                if (node.parentNode.nodeName === 'A' || (node.parentNode.nodeName === 'LI' && node.parentNode.parentNode.nodeName === 'A')) continue;
+                if (urlRegex.test(node.nodeValue)) {
+                    const span = document.createElement('span');
+                    span.innerHTML = node.nodeValue.replace(urlRegex, (url) => {
+                        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                    });
+                    node.parentNode.replaceChild(span, node);
+                }
+            }
+        }
+
+        function handleContentInput() {
+            updateActiveNoteData();
+        }
+
+        function handleTitleKeydown(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const contentDiv = document.getElementById('activeNoteContent');
+                contentDiv.focus();
+                const range = document.createRange();
+                range.selectNodeContents(contentDiv);
+                range.collapse(false);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+
+        function handleContentKeydown(e) {
+            const sel = window.getSelection();
+            if (!sel.rangeCount) return;
+            const range = sel.getRangeAt(0);
+            const node = range.startContainer;
+
+            if (e.key === 'Backspace') {
+                const contentDiv = document.getElementById('activeNoteContent');
+                if (contentDiv.innerHTML.trim() === '' || (contentDiv.textContent.trim() === '' && contentDiv.children.length === 0)) {
                     e.preventDefault();
-                    openCreateModal();
-                } else if (e.key === 'ArrowLeft') {
-                    if (currentPageIndex > 0) {
-                        currentPageIndex--;
-                        switchPageByIndex(currentPageIndex);
-                    }
-                } else if (e.key === 'ArrowRight') {
-                    if (currentPageIndex < pageList.length - 1) {
-                        currentPageIndex++;
-                        switchPageByIndex(currentPageIndex);
+                    contentDiv.innerHTML = '<br>';
+                    updateActiveNoteData();
+                    return;
+                }
+            }
+
+            const menu = document.getElementById('slashMenu');
+            if (e.key === '/') {
+                setTimeout(() => {
+                    menu.style.display = 'block';
+                }, 10);
+            } else if (menu.style.display === 'block') {
+                if (e.key === 'Enter' || e.key === 'Tab') {
+                    e.preventDefault();
+                    menu.style.display = 'none';
+                    removeSlashCommandText(node);
+                    openTableModal();
+                    return;
+                } else if (e.key === 'Escape' || e.key === 'Space') {
+                    menu.style.display = 'none';
+                }
+            }
+
+            if (e.key === ' ') {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const textContent = node.textContent;
+                    const offset = range.startOffset;
+                    if (textContent.trim() === '-' && offset === 1) {
+                        e.preventDefault();
+                        node.textContent = '';
+                        document.execCommand('insertUnorderedList', false, null);
                     }
                 }
+            }
+        }
+
+        function removeSlashCommandText(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                node.textContent = node.textContent.replace(/\/table|\/tab|\//g, '');
+            } else {
+                const sel = window.getSelection();
+                if (sel.rangeCount) {
+                    const r = sel.getRangeAt(0);
+                    const container = r.startContainer;
+                    if (container.nodeType === Node.TEXT_NODE) {
+                        container.textContent = container.textContent.replace(/\/table|\/tab|\//g, '');
+                    }
+                }
+            }
+        }
+
+        function handleContentKeyup(e) {
+            const menu = document.getElementById('slashMenu');
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const node = sel.getRangeAt(0).startContainer;
+                if (node.nodeType === Node.TEXT_NODE && !node.textContent.includes('/')) {
+                    menu.style.display = 'none';
+                }
+            }
+        }
+
+        function openTableModal() {
+            document.getElementById('tableRows').value = 3;
+            document.getElementById('tableCols').value = 3;
+            document.getElementById('tableModal').classList.add('active');
+            setTimeout(() => {
+                const inputRows = document.getElementById('tableRows');
+                inputRows.focus();
+                inputRows.select();
+            }, 50);
+        }
+
+        function closeTableModal() {
+            document.getElementById('tableModal').classList.remove('active');
+        }
+
+        function handleTableInputKeydown(e, nextField) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (nextField === 'cols') {
+                    const inputCols = document.getElementById('tableCols');
+                    inputCols.focus();
+                    inputCols.select();
+                } else if (nextField === 'submit') {
+                    confirmCreateTable();
+                }
+            }
+        }
+
+        function confirmCreateTable() {
+            const rows = parseInt(document.getElementById('tableRows').value) || 3;
+            const cols = parseInt(document.getElementById('tableCols').value) || 3;
+            closeTableModal();
+
+            let tableHtml = '<table><thead><tr>';
+            for (let c = 0; c < cols; c++) {
+                tableHtml += `<th><br></th>`;
+            }
+            tableHtml += '</tr></thead><tbody>';
+
+            for (let r = 0; r < rows - 1; r++) {
+                tableHtml += '<tr>';
+                for (let c = 0; c < cols; c++) {
+                    tableHtml += `<td><br></td>`;
+                }
+                tableHtml += '</tr>';
+            }
+            tableHtml += '</tbody></table><p><br></p>';
+
+            const contentDiv = document.getElementById('activeNoteContent');
+            contentDiv.focus();
+            document.execCommand('insertHTML', false, tableHtml);
+            updateActiveNoteData();
+        }
+
+        function insertTableFromSlash() {
+            document.getElementById('slashMenu').style.display = 'none';
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const range = sel.getRangeAt(0);
+                const node = range.startContainer;
+                removeSlashCommandText(node);
+            }
+            openTableModal();
+        }
+
+        function handleSidebarKeydown(e) {
+            if ((e.key === 'Backspace' || e.key === 'Delete') && activeNoteId) {
+                e.preventDefault();
+                deleteNoteById(activeNoteId);
+            }
+        }
+
+        function deleteNoteById(id) {
+            const cardEl = document.getElementById(`note-card-${id}`);
+            if (cardEl) {
+                cardEl.classList.add('fade-out');
+            }
+            setTimeout(() => {
+                notes = notes.filter(x => x.id !== id);
+                if (activeNoteId === id) {
+                    activeNoteId = null;
+                    document.getElementById('noNoteSelected').style.display = 'flex';
+                    document.getElementById('activeNoteEditor').style.display = 'none';
+                }
+                saveNotesData();
+                renderNotesList();
+            }, 300);
+        }
+
+        function saveNotesData() {
+            localStorage.setItem('raphael_notes_v4', JSON.stringify(notes));
+        }
+
+        // --- GESTION DU CLAVIER DANS LA MODALE TÂCHE ---
+        function handleTaskModalKeydown(e, nextField) {
+            if (e.key === 'Enter') {
+                if (e.target.tagName === 'TEXTAREA' && !e.ctrlKey && !e.metaKey) {
+                    return;
+                }
+                e.preventDefault();
+                if (nextField === 'subject') {
+                    document.getElementById('fSubject').focus();
+                } else if (nextField === 'dueDate') {
+                    document.getElementById('fDueDate').focus();
+                } else if (nextField === 'notes') {
+                    document.getElementById('fNotes').focus();
+                } else if (nextField === 'submit') {
+                    saveTaskForm();
+                }
+            }
+        }
+
+        // --- MÉTÉO DYNAMIQUE ---
+        async function fetchWeather() {
+            try {
+                let lat = 48.8566, lon = 2.3522;
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        loadWeatherData(pos.coords.latitude, pos.coords.longitude);
+                    }, () => {
+                        loadWeatherData(lat, lon);
+                    });
+                } else {
+                    loadWeatherData(lat, lon);
+                }
+            } catch (e) {
+                console.log('Météo indisponible');
+            }
+        }
+
+        async function loadWeatherData(lat, lon) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                const data = await res.json();
+                if (data && data.current_weather) {
+                    const temp = Math.round(data.current_weather.temperature);
+                    const code = data.current_weather.weathercode;
+                    let icon = '☀️';
+                    if (code >= 1 && code <= 3) icon = '⛅';
+                    else if (code >= 45 && code <= 48) icon = '🌫️';
+                    else if (code >= 51 && code <= 67) icon = '🌧️';
+                    else if (code >= 71) icon = '❄️';
+                    else if (code >= 95) icon = '⛈️';
+
+                    document.getElementById('weatherIcon').textContent = icon;
+                    document.getElementById('weatherTemp').textContent = `${temp}°C`;
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        fetchWeather();
+        setInterval(fetchWeather, 600000);
+
+        window.addEventListener('keydown', (e) => {
+            const activeEl = document.activeElement;
+            const isEditingText = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT' || activeEl.isContentEditable);
+
+            if (!isEditingText) {
+                if (e.code === 'Space') { e.preventDefault(); openCreateModal(); }
+                else if (e.key === 'ArrowLeft' && currentPageIndex > 0) { currentPageIndex--; switchPageByIndex(currentPageIndex); }
+                else if (e.key === 'ArrowRight' && currentPageIndex < pageList.length - 1) { currentPageIndex++; switchPageByIndex(currentPageIndex); }
             }
         });
 
         function switchPageByIndex(index) {
-            const pageId = pageList[index];
-            const btn = document.getElementById(`btn-nav-${pageId}`);
-            switchPage(pageId, btn);
+            switchPage(pageList[index], document.getElementById(`btn-nav-${pageList[index]}`));
         }
 
         function updateClock() {
             const now = new Date();
             document.getElementById('giantClock').textContent = now.toLocaleTimeString('fr-FR');
-            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-            document.getElementById('giantDate').textContent = now.toLocaleDateString('fr-FR', options);
+            document.getElementById('giantDate').textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -940,6 +1624,11 @@
             
             document.getElementById(`page-${pageId}`).classList.add('active');
             btn.classList.add('active');
+
+            if (pageId === 'notes') {
+                renderNotesList();
+                document.getElementById('notesListContainer').focus();
+            }
         }
 
         function saveData() {
@@ -953,7 +1642,6 @@
             renderCalendar();
         }
 
-        // --- ACCUEIL ---
         function renderHomeToday() {
             const containerToday = document.getElementById('homeTodayTasksList');
             const containerOverdue = document.getElementById('homeOverdueTasksList');
@@ -963,7 +1651,6 @@
             containerOverdue.innerHTML = '';
 
             const todayStr = new Date().toISOString().split('T')[0];
-
             const todayTasks = tasks.filter(t => t.dueDate === todayStr);
             const overdueTasks = tasks.filter(t => t.dueDate && t.dueDate < todayStr && !t.completed);
 
@@ -972,31 +1659,23 @@
             if (todayTasks.length === 0) {
                 containerToday.innerHTML = `<div style="font-size:0.95rem; color:var(--text-muted); padding:6px 0;">Aucun devoir prévu pour aujourd'hui.</div>`;
             } else {
-                todayTasks.forEach(t => {
-                    containerToday.appendChild(createHomeCard(t));
-                });
+                todayTasks.forEach(t => containerToday.appendChild(createHomeCard(t)));
             }
 
             if (overdueTasks.length === 0) {
                 overdueTitle.style.display = 'none';
             } else {
                 overdueTitle.style.display = 'block';
-                overdueTasks.forEach(t => {
-                    containerOverdue.appendChild(createHomeCard(t));
-                });
+                overdueTasks.forEach(t => containerOverdue.appendChild(createHomeCard(t)));
             }
         }
 
         function createHomeCard(t) {
             const wrapper = document.createElement('div');
             wrapper.className = 'today-card-item';
-
             const card = document.createElement('div');
             card.className = `cal-task-card ${t.completed ? 'completed' : ''}`;
-            card.style.height = '44px';
-            card.style.width = '100%';
             const color = subjectMeta[t.subject]?.color || 'var(--c-autre)';
-
             card.innerHTML = `
                 <div class="task-banner" style="background-color: ${color}"></div>
                 <div class="cal-task-subject ${t.completed ? 'completed' : ''}">${t.subject}</div>
@@ -1006,14 +1685,11 @@
             return wrapper;
         }
 
-        // --- ONGLET TÂCHES ---
         function renderSubjectsGrid() {
             const container = document.getElementById('subjectsGridContainer');
             container.innerHTML = '';
 
-            const subjectKeys = Object.keys(subjectMeta);
-
-            subjectKeys.forEach(subj => {
+            Object.keys(subjectMeta).forEach(subj => {
                 const meta = subjectMeta[subj];
                 const subjTasks = tasks.filter(t => t.subject === subj);
                 const pendingCount = subjTasks.filter(t => !t.completed).length;
@@ -1046,32 +1722,27 @@
                             <h3>${subj}</h3>
                             <span>${meta.subtitle}</span>
                         </div>
-                        <button class="btn-subject-add" onclick="openCreateModalForSubject('${subj}')" title="Ajouter une tâche">+</button>
+                        <button class="btn-subject-add" onclick="openCreateModalForSubject('${subj}')">+</button>
                     </div>
-                    <div class="subject-tasks-list">
-                        ${tasksHtml}
-                    </div>
+                    <div class="subject-tasks-list">${tasksHtml}</div>
                     <div class="subject-footer-count">${pendingCount} en attente</div>
                 `;
-
                 container.appendChild(card);
             });
         }
 
         function toggleTaskQuick(id) {
             const t = tasks.find(x => x.id === id);
-            if (t) {
-                t.completed = !t.completed;
-                saveData();
-            }
+            if (t) { t.completed = !t.completed; saveData(); }
         }
 
         function openCreateModalForSubject(subj) {
+            lastSelectedSubject = subj;
+            localStorage.setItem('raphael_last_subject', lastSelectedSubject);
             openCreateModal();
             document.getElementById('fSubject').value = subj;
         }
 
-        // --- CALENDRIER ---
         function getMonday(d) {
             d = new Date(d);
             const day = d.getDay();
@@ -1079,42 +1750,29 @@
             return new Date(d.setDate(diff));
         }
 
-        function changeWeek(direction) {
-            currentMondayOffset += direction * 7;
+        function changeWeek(dir) {
+            currentMondayOffset += dir * 7;
             renderCalendar();
         }
 
         function renderCalendar() {
             const grid = document.getElementById('calendarGrid');
             grid.innerHTML = '';
-
             const today = new Date();
             const startOfWeek = getMonday(today);
             startOfWeek.setDate(startOfWeek.getDate() + currentMondayOffset);
-
             const endOfWeek = new Date(startOfWeek);
             endOfWeek.setDate(endOfWeek.getDate() + 6);
 
-            const options = { day: 'numeric', month: 'short' };
-            document.getElementById('weekIndicator').textContent = `Semaine du ${startOfWeek.toLocaleDateString('fr-FR', options)} au ${endOfWeek.toLocaleDateString('fr-FR', options)}`;
+            document.getElementById('weekIndicator').textContent = `Semaine du ${startOfWeek.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} au ${endOfWeek.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}`;
 
-            const weekDays = [];
             for (let i = 0; i < 7; i++) {
                 const d = new Date(startOfWeek);
                 d.setDate(d.getDate() + i);
-                weekDays.push(d);
-            }
-
-            weekDays.forEach(dateObj => {
-                const dateStr = dateObj.toISOString().split('T')[0];
-                const dayName = dateObj.toLocaleDateString('fr-FR', { weekday: 'short' });
-                const formattedDateHeader = `${dayName} ${dateObj.getDate()}`;
-
+                const dateStr = d.toISOString().split('T')[0];
                 const col = document.createElement('div');
                 col.className = 'day-col-full';
-                col.dataset.date = dateStr;
-
-                col.innerHTML = `<div class="day-header-full" style="text-transform:capitalize;">${formattedDateHeader}</div>`;
+                col.innerHTML = `<div class="day-header-full" style="text-transform:capitalize;">${d.toLocaleDateString('fr-FR', { weekday: 'short' })} ${d.getDate()}</div>`;
 
                 col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('drag-over'); });
                 col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
@@ -1123,127 +1781,94 @@
                     col.classList.remove('drag-over');
                     const taskId = e.dataTransfer.getData('text/plain');
                     const task = tasks.find(t => t.id === taskId);
-                    if (task && task.dueDate !== dateStr) {
-                        task.dueDate = dateStr;
-                        saveData();
-                    }
+                    if (task) { task.dueDate = dateStr; saveData(); }
                 });
 
-                const dayTasks = tasks.filter(t => t.dueDate === dateStr);
-
-                dayTasks.forEach(t => {
+                tasks.filter(t => t.dueDate === dateStr).forEach(t => {
                     const card = document.createElement('div');
                     card.className = `cal-task-card ${t.completed ? 'completed' : ''}`;
                     card.draggable = true;
                     const color = subjectMeta[t.subject]?.color || 'var(--c-autre)';
-
                     card.innerHTML = `
                         <div class="task-banner" style="background-color: ${color}"></div>
                         <div class="cal-task-subject ${t.completed ? 'completed' : ''}">${t.subject}</div>
                     `;
-
-                    card.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', t.id); });
+                    card.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', t.id));
                     card.onclick = () => openViewModal(t.id);
                     col.appendChild(card);
                 });
-
                 grid.appendChild(col);
-            });
+            }
         }
 
-        // --- MODALES ---
         function openViewModal(id) {
             activeTaskId = id;
             const t = tasks.find(x => x.id === id);
             if (!t) return;
-
             document.getElementById('vSubject').textContent = t.subject;
             document.getElementById('vTitle').textContent = t.title;
-            const dateFmt = t.dueDate ? new Date(t.dueDate).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Pas de date';
-            document.getElementById('vDate').textContent = `Échéance max : ${dateFmt}`;
-            document.getElementById('vNotes').textContent = t.notes || 'Aucune note ou contenu spécifique.';
+            document.getElementById('vDate').textContent = `Échéance max : ${t.dueDate}`;
+            document.getElementById('vNotes').textContent = t.notes || 'Aucune note.';
             document.getElementById('vCompletedCheck').checked = !!t.completed;
-
             document.getElementById('viewModal').classList.add('active');
         }
 
         function toggleTaskCompleted() {
             if (activeTaskId) {
                 const t = tasks.find(x => x.id === activeTaskId);
-                if (t) {
-                    t.completed = document.getElementById('vCompletedCheck').checked;
-                    saveData();
-                }
+                if (t) { t.completed = document.getElementById('vCompletedCheck').checked; saveData(); }
             }
         }
 
-        function closeViewModal() {
-            document.getElementById('viewModal').classList.remove('active');
-        }
-
+        function closeViewModal() { document.getElementById('viewModal').classList.remove('active'); }
         function openCreateModal() {
             activeTaskId = null;
             document.getElementById('editModalTitle').textContent = 'Nouvelle tâche';
             document.getElementById('fTitle').value = '';
-            document.getElementById('fSubject').value = 'Mathématiques';
+            document.getElementById('fSubject').value = lastSelectedSubject;
             document.getElementById('fDueDate').value = new Date().toISOString().split('T')[0];
             document.getElementById('fNotes').value = '';
             document.getElementById('btnDelete').style.display = 'none';
-
             document.getElementById('editModal').classList.add('active');
-            setTimeout(() => document.getElementById('fTitle').focus(), 50);
+            setTimeout(() => {
+                document.getElementById('fTitle').focus();
+            }, 50);
         }
-
         function openEditModal(id) {
             activeTaskId = id;
             const t = tasks.find(x => x.id === id);
             if (!t) return;
-
             document.getElementById('editModalTitle').textContent = 'Modifier la tâche';
             document.getElementById('fTitle').value = t.title;
             document.getElementById('fSubject').value = t.subject;
             document.getElementById('fDueDate').value = t.dueDate;
             document.getElementById('fNotes').value = t.notes || '';
             document.getElementById('btnDelete').style.display = 'block';
-
             document.getElementById('editModal').classList.add('active');
+            setTimeout(() => {
+                document.getElementById('fTitle').focus();
+            }, 50);
         }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('active');
-        }
-
+        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
         function saveTaskForm() {
             const title = document.getElementById('fTitle').value.trim();
             if (!title) return;
-
             const subject = document.getElementById('fSubject').value;
             const dueDate = document.getElementById('fDueDate').value;
             const notes = document.getElementById('fNotes').value;
 
+            lastSelectedSubject = subject;
+            localStorage.setItem('raphael_last_subject', lastSelectedSubject);
+
             if (activeTaskId) {
                 const t = tasks.find(x => x.id === activeTaskId);
-                if (t) {
-                    t.title = title;
-                    t.subject = subject;
-                    t.dueDate = dueDate;
-                    t.notes = notes;
-                }
+                if (t) { t.title = title; t.subject = subject; t.dueDate = dueDate; t.notes = notes; }
             } else {
-                tasks.push({
-                    id: Date.now().toString(),
-                    title,
-                    subject,
-                    dueDate,
-                    notes,
-                    completed: false
-                });
+                tasks.push({ id: Date.now().toString(), title, subject, dueDate, notes, completed: false });
             }
-
             saveData();
             closeEditModal();
         }
-
         function deleteCurrentTask() {
             if (activeTaskId) {
                 tasks = tasks.filter(x => x.id !== activeTaskId);
